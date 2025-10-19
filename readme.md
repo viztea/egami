@@ -9,7 +9,7 @@ smol image sharing server written in Go.
 Example using `curl`:
 
 ```bash
-curl -F "file=@/path/to/your/image.jpg" http://localhost:3333/upload
+curl -X POST -H 'Authorization: Bearer my-user-token' -F "file=@/path/to/your/image.jpg" http://localhost:3333/upload
 ```
 
 The server will respond with a JSON object containing the URLs of the uploaded images.
