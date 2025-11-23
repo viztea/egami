@@ -34,9 +34,26 @@ type upload struct {
 	Filename string `json:"filename"`
 }
 
+var egamiMimeTypes = map[string]string{
+	".flac": "audio/flac",
+	".opus": "audio/ogg",
+	".webm": "video/webm",
+	".mkv":  "video/matroska",
+	".ogg":  "audio/ogg",
+	".ogv":  "video/ogg",
+	".mp4":  "video/mp4",
+	".m4v":  "video/mp4",
+	".m4a":  "audio/mp4",
+	".txt":  "text/plain",
+}
+
 func main() {
 	if EgamiUserToken == "" {
 		panic("EGAMI_USER_TOKEN environment variable is not set")
+	}
+
+	for ext, typ := range egamiMimeTypes {
+		mime.AddExtensionType(ext, typ)
 	}
 
 	router := mux.NewRouter()
