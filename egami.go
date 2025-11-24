@@ -94,7 +94,7 @@ func main() {
 
 		mp := multipart.NewReader(r.Body, params["boundary"])
 
-		images := []upload{}
+		images := make([]upload, 0)
 		for {
 			part, err := mp.NextPart()
 			if err == io.EOF {
@@ -102,7 +102,7 @@ func main() {
 			} else if err != nil {
 				http.Error(w, "Error reading multipart data", http.StatusInternalServerError)
 				return
-			} else if part.FileName() != "file" {
+			} else if part.FormName() != "file" {
 				continue
 			}
 
@@ -149,14 +149,14 @@ func main() {
 			})
 		}
 
-		resp, err := json.Marshal(&uploadResponse{
-			Uploads: images,
-		})
-
 		if len(images) == 0 {
 			http.Error(w, "No files uploaded", http.StatusBadRequest)
 			return
 		}
+
+		resp, err := json.Marshal(&uploadResponse{
+			Uploads: images,
+		})
 
 		if err != nil {
 			http.Error(w, "Error preparing response", http.StatusInternalServerError)
